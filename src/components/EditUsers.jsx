@@ -6,6 +6,7 @@ import { message } from "antd";
 import { Avatar } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import UserDetails from "../commons/UserDetails";
+import cookie from "../hooks/cookie";
 
 const EditUsers = () => {
   //Hooks
@@ -20,9 +21,13 @@ const EditUsers = () => {
   //Handlers and functions
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/user/admin", {
-        withCredentials: true,
-      })
+      .post(
+        "https://devgames3-b95m.onrender.com/api/user/admin",
+        { token: cookie() },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         dispatch(setUsersDb(res.data));
       });
@@ -30,8 +35,9 @@ const EditUsers = () => {
 
   const deleteUserHandler = async (id) => {
     try {
-      const deletedUser = await axios.delete(
-        `http://localhost:3001/api/user/admin/delete/${id}`,
+      const deletedUser = await axios.post(
+        `https://devgames3-b95m.onrender.com/api/user/admin/delete/${id}`,
+        { token: cookie() },
         {
           withCredentials: true,
         }
@@ -45,8 +51,8 @@ const EditUsers = () => {
   const editAdminHandler = async (id) => {
     try {
       const editedUser = await axios.put(
-        `http://localhost:3001/api/user/admin/access/${id}`,
-        {},
+        `https://devgames3-b95m.onrender.com/api/user/admin/access/${id}`,
+        { token: cookie() },
         {
           withCredentials: true,
         }

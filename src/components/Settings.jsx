@@ -1,13 +1,14 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import Input from "../commons/Input";
+import cookie from "../hooks/cookie";
+import { setUser } from "../state/user";
 
 const Settings = () => {
-  //States
-  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   //Hooks
   const navigate = useNavigate();
@@ -16,14 +17,17 @@ const Settings = () => {
   const email = useInput();
   const password = useInput();
 
+  console.log(cookie());
+
   //Handlers and functions
   const onSubmitHandler = async (e) => {
     try {
       e.preventDefault();
 
       const updateInfo = await axios.put(
-        "http://localhost:3001/api/user/me/edit",
+        "https://devgames3-b95m.onrender.com/api/user/me/edit",
         verifyData({
+          token: cookie(),
           name: name.value,
           lastName: lastName.value,
           email: email.value,
@@ -31,7 +35,10 @@ const Settings = () => {
         }),
         { withCredentials: true }
       );
+      localStorage.setItem("cookie", JSON.stringify(updateInfo.data));
+      console.log(updateInfo)
 
+      dispatch(setUser(updateInfo.data.payload));
       alert("Updated successfuly");
       navigate("/");
     } catch (error) {

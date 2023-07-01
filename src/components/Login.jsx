@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:3001/api/user/login",
+        "https://devgames3-b95m.onrender.com/api/user/login",
         {
           email: email.value,
           password: password.value,
@@ -31,9 +31,11 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        dispatch(setUser(res.data));
+        
+        dispatch(setUser(res.data.payload));
+        localStorage.setItem("cookie", JSON.stringify(res.data));
         axios
-          .get(`http://localhost:3001/api/cart/${res.data.id}`, {
+          .get(`https://devgames3-b95m.onrender.com/api/cart/${res.data.payload.id}`, {
             withCredentials: true,
           })
           .then((res) => {

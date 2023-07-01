@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import stringGenerator from "../utils/stringGenerator";
 import { setCart } from "../state/cart";
 import { setGames } from "../state/games";
-import { setReviews } from "../state/reviews";
+import { addReview, setReviews } from "../state/reviews";
 import { TextField, Rating } from "@mui/material";
 import { FaCheck } from "react-icons/fa";
 import ProductData from "../commons/ProductData.jsx";
@@ -28,6 +28,8 @@ const Product = () => {
   const average = useSelector((state) => state.average);
   const reviews = useSelector((state) => state.reviews);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [active, setActive] = useState(false);
+  const [userReviews, setUserReviews] = useState(true);
 
   //Variables
   const developerString = stringGenerator(product.developers);
@@ -36,6 +38,38 @@ const Product = () => {
   const tagString = product.tags.join(", ");
 
   //Handlers and functions
+
+  useEffect(() => {
+    axios
+      .get(`https://devgames3-b95m.onrender.com/api/review/${product.id}`)
+      .then((res) => {
+        console.log("revieewwsss", res.data);
+        dispatch(setReviews(res.data));
+      });
+  }, []);
+
+  const getAllReviewsOfAUserOrAllReviews = (userName) => {
+    userReviews ? setUserReviews(false) : setUserReviews(true);
+    if (userReviews)
+      axios
+        .get(
+          `https://devgames3-b95m.onrender.com/api/review/${product.id}/${userName}`,
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => dispatch(setReviews(res.data)));
+    else {
+      axios
+        .get(`https://devgames3-b95m.onrender.com/api/review/${product.id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log("revieewwsss", res.data);
+          dispatch(setReviews(res.data));
+        });
+    }
+  };
   const buyHandler = () => {
     const validate = cart.some((el) => el.id === product.id);
     if (user && !validate) {
@@ -51,7 +85,7 @@ const Product = () => {
         dispatch(setCart(product));
         if (user.id) {
           const addToCart = await axios.post(
-            `http://localhost:3001/api/cart/addItem/${user.id}/${product.id}`,
+            `https://devgames3-b95m.onrender.com/api/cart/addItem/${user.id}/${product.id}`,
             {},
             { withCredentials: true }
           );
@@ -71,14 +105,14 @@ const Product = () => {
     try {
       setAnchorEl(null);
       const deletedGame = await axios.delete(
-        `http://localhost:3001/api/games/admin/delete/${item.id}`,
+        `https://devgames3-b95m.onrender.com/api/games/admin/delete/${item.id}`,
         {
           withCredentials: true,
         }
       );
 
       const resetGames = await axios
-        .get("http://localhost:3001/api/games")
+        .get("https://devgames3-b95m.onrender.com/api/games")
         .then((res) => {
           dispatch(setGames(res.data));
         });
@@ -88,35 +122,43 @@ const Product = () => {
     }
   };
 
-  const showReviewsHandler = () => {
-    axios.get(`http://localhost:3001/api/review/${product.id}`).then((res) => {
-      console.log("revieewwsss", res.data);
-      dispatch(setReviews(res.data));
-    });
-  };
+  const showReviewsHandler = () =>
+    active ? setActive(false) : setActive(true);
 
   const reviewSubmitHandler = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3001/api/review/${product.id}/${user.id}`, {
-        content: content.value,
-        rating: ratingValue.value,
-      })
+      .post(
+        `https://devgames3-b95m.onrender.com/api/review/${product.id}/${user.id}`,
+        {
+          content: content.value,
+          rating: Number(ratingValue.value),
+        }
+      )
       .then((res) => {
-        console.log("mi review es", res.data);
+        dispatch(
+          addReview({
+            id: res.data.review.id,
+            content: res.data.review.content,
+            rating: res.data.review.rating,
+            user: res.data.user,
+          })
+        );
         content.value = "";
       });
   };
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/review/${product.id}`).then((res) => {
-      const averageArray = res.data.map((review) => review.rating);
-      const average =
-        averageArray.reduce((acc, num) => (acc += num)) / averageArray.length;
-      console.log("averageArray", averageArray);
-      console.log("average", average);
-      dispatch(setAverage(average));
-    });
+    axios
+      .get(`https://devgames3-b95m.onrender.com/api/review/${product.id}`)
+      .then((res) => {
+        const averageArray = res.data.map((review) => review.rating);
+        const average =
+          averageArray.reduce((acc, num) => (acc += num)) / averageArray.length;
+        console.log("averageArray", averageArray);
+        console.log("average", average);
+        dispatch(setAverage(average));
+      });
   }, []);
 
   return (
@@ -139,18 +181,24 @@ const Product = () => {
           <p className="productDescription">{product.description}</p>
           <div className="productReviewsRating">
             <p className="productReviewsTitle">
-              1910 reviews.
-              <span onClick={showReviewsHandler}>Show reviews</span>
+              {reviews.length
+                ? (reviews.length,
+                  (<span onClick={showReviewsHandler}>Show reviews</span>))
+                : " There are no reviews for this game."}
             </p>
           </div>
-          {reviews.length ? (
+          {active ? (
             reviews.map((review) => (
               <div className="productUsersReviews">
                 <p className="usersReviewsDetails">
-                  <span>
-                    {review.user.name} {review.user.lastName}
-                  </span>
-                  :
+                  <span
+                    onClick={() =>
+                      getAllReviewsOfAUserOrAllReviews(review.user.name)
+                    }
+                  >
+                    {review.user.name}
+                  </span>{" "}
+                  {review.user.lastName}:
                 </p>
                 <p className="usersReviewsContent">{review.content}</p>
                 <p className="usersReviewsContent">
@@ -159,7 +207,7 @@ const Product = () => {
               </div>
             ))
           ) : (
-            <p className="noReviews"> There are no reviews for this game.</p>
+            <></>
           )}
 
           {user.id ? (

@@ -9,7 +9,19 @@ import { setGenres } from "./state/genres";
 import { setDevelopers } from "./state/developers";
 import { setPlatforms } from "./state/platforms";
 import { importCartFromLs, importCartFromDb } from "./state/cart";
-import {Home, Navbar, Register, Login, Product, Cart, EditProducts, EditCategories, EditUsers, History, Settings} from "../src/utils/index";
+import {
+  Home,
+  Navbar,
+  Register,
+  Login,
+  Product,
+  Cart,
+  EditProducts,
+  EditCategories,
+  EditUsers,
+  History,
+  Settings,
+} from "../src/utils/index";
 
 function App() {
   //Hooks
@@ -23,10 +35,10 @@ function App() {
   //Handlers and functions
   useEffect(() => {
     dispatch(setProduct(JSON.parse(localStorage.getItem("singleProduct"))));
-    axios
-      .get("http://localhost:3001/api/user/me", { withCredentials: true })
-      .then((res) => res.data)
-      .then((data) => dispatch(setUser(data)));
+    if (!user.id) {
+      const cookie = JSON.parse(localStorage.getItem("cookie"));
+      if (cookie) dispatch(setUser(cookie.payload));
+    }
     axios
       .get("http://localhost:3001/api/genres/", { withCredentials: true })
       .then((res) => {
