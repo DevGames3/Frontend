@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { removeFromCart, setCart, removeAllItems } from "../state/cart";
+import { removeFromCart, removeAllItems } from "../state/cart";
 import { FaTrash } from "react-icons/fa";
 
 const Cart = () => {
@@ -13,7 +13,7 @@ const Cart = () => {
   //States
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user);
-  const cartTotalPrice = useSelector((state) => state.cartTotalPrice);
+
 
   //Variables
   const total = cart.reduce((acc, el) => acc + el.price, 0);

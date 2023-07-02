@@ -12,7 +12,7 @@ const AdminCardBtns = ({
   handleAdminNavigate,
   handleAdminDeleteProduct,
 }) => {
-  const ITEM_HEIGHT = 50;
+
 
   return (
     <div>
