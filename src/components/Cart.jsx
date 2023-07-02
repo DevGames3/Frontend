@@ -24,7 +24,7 @@ const Cart = () => {
     if (user.id) {
       axios
         .post(
-          `http://localhost:3001/api/cart/removeItem/${user.id}/${item.id}`,
+          `https://devgames3-b95m.onrender.com/api/cart/removeItem/${user.id}/${item.id}`,
           {},
           { withCredentials: true }
         )
@@ -37,7 +37,7 @@ const Cart = () => {
     if (user.id) {
       axios
         .post(
-          `http://localhost:3001/api/cart/purchase/${user.id}`,
+          `https://devgames3-b95m.onrender.com/api/cart/purchase/${user.id}`,
           {},
           { withCredentials: true }
         )

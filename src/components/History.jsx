@@ -16,7 +16,7 @@ const History = () => {
 
   useEffect(()=>{
     if(user.id){
-      axios.get(`http://localhost:3001/api/cart/history/${user.id}`).then((res)=> dispatch(setShoppingHistory(res.data)))
+      axios.get(`https://devgames3-b95m.onrender.com/api/cart/history/${user.id}`).then((res)=> dispatch(setShoppingHistory(res.data)))
     }
   }, [dispatch,user.id])
 

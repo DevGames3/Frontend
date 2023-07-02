@@ -32,7 +32,7 @@ const EditProducts = () => {
   useEffect(() => {
     if (params.id) {
       axios
-        .get(`http://localhost:3001/api/games/${Number(params.id)}`)
+        .get(`https://devgames3-b95m.onrender.com/api/games/${Number(params.id)}`)
         .then((res) => {
           setSelectedGame(res.data);
         });
@@ -65,7 +65,7 @@ const EditProducts = () => {
     if (params.id) {
       axios
         .put(
-          `http://localhost:3001/api/games/admin/edit/${params.id}`,
+          `https://devgames3-b95m.onrender.com/api/games/admin/edit/${params.id}`,
           {
             name: name.value,
             description: description.value,
@@ -91,7 +91,7 @@ const EditProducts = () => {
     } else {
       axios
         .post(
-          `http://localhost:3001/api/games/admin/create`,
+          `https://devgames3-b95m.onrender.com/api/games/admin/create`,
           {
             name: name.value,
             description: description.value,

@@ -17,7 +17,7 @@ const Register = () => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/api/user/register", {
+      .post("https://devgames3-b95m.onrender.com/api/user/register", {
         name: name.value,
         lastName: lastname.value,
         email: email.value,

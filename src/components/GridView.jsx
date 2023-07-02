@@ -30,13 +30,13 @@ const GridView = () => {
   //Handlers and functions
   useEffect(() => {
     if (pathname === "") {
-      axios.get("http://localhost:3001/api/games").then((res) => {
+      axios.get("https://devgames3-b95m.onrender.com/api/games").then((res) => {
         dispatch(setGames(res.data));
       });
     }
     if (pathname === "search") {
       axios
-        .get(`http://localhost:3001/api/games/search?name=${query}`, {
+        .get(`https://devgames3-b95m.onrender.com/api/games/search?name=${query}`, {
           withCredentials: true,
         })
         .then((result) => {
@@ -45,7 +45,7 @@ const GridView = () => {
     }
     if (pathname === "category") {
       axios
-        .get(`http://localhost:3001/api/games/category/${category}`, {
+        .get(`https://devgames3-b95m.onrender.com/api/games/category/${category}`, {
           withCredentials: true,
         })
         .then((result) => {
@@ -57,7 +57,7 @@ const GridView = () => {
   const singleProductHandler = async (item) => {
     try {
       const singleProduct = await axios.get(
-        `http://localhost:3001/api/games/${item.id}`
+        `https://devgames3-b95m.onrender.com/api/games/${item.id}`
       );
       dispatch(setProduct(singleProduct.data));
       localStorage.setItem("singleProduct", JSON.stringify(singleProduct.data));
@@ -72,7 +72,7 @@ const GridView = () => {
       const validate = cart.some((el) => el.id === item.id);
       if (!validate) {
         const gameToAdd = await axios.get(
-          `http://localhost:3001/api/games/${item.id}`
+          `https://devgames3-b95m.onrender.com/api/games/${item.id}`
         );
 
         dispatch(setCart(gameToAdd.data));
@@ -80,7 +80,7 @@ const GridView = () => {
         if (user.id) {
           axios
             .post(
-              `http://localhost:3001/api/cart/addItem/${user.id}/${item.id}`,
+              `https://devgames3-b95m.onrender.com/api/cart/addItem/${user.id}/${item.id}`,
               {},
               { withCredentials: true }
             )
@@ -111,12 +111,12 @@ const GridView = () => {
     setAnchorEl(null);
 
     axios
-      .delete(`http://localhost:3001/api/games/admin/delete/${id}`, {
+      .delete(`https://devgames3-b95m.onrender.com/api/games/admin/delete/${id}`, {
         withCredentials: true,
       })
       .then(() => {
         axios
-          .get("http://localhost:3001/api/games")
+          .get("https://devgames3-b95m.onrender.com/api/games")
           .then((res) => dispatch(setGames(res.data)));
       })
       .catch(() => {

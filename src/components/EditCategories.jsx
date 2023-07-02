@@ -24,7 +24,7 @@ const EditCategories = () => {
 
     axios
       .post(
-        "http://localhost:3001/api/genres/create",
+        "https://devgames3-b95m.onrender.com/api/genres/create",
         { name: newCategory.value },
         { withCredentials: true }
       )
@@ -43,13 +43,13 @@ const EditCategories = () => {
     e.preventDefault();
     axios
       .put(
-        `http://localhost:3001/api/genres/edit/${oldCategory.value}`,
+        `https://devgames3-b95m.onrender.com/api/genres/edit/${oldCategory.value}`,
         { name: editedCategory.value },
         { withCredentials: true }
       )
       .then(() => {
         axios
-          .get("http://localhost:3001/api/genres/", {
+          .get("https://devgames3-b95m.onrender.com/api/genres/", {
             withCredentials: true,
           })
           .then((updateGenres) => {
@@ -66,7 +66,7 @@ const EditCategories = () => {
 
   const handleAdminDeleteCategory =  (id) => {
     axios
-      .delete(`http://localhost:3001/api/genres/${id}`, {
+      .delete(`https://devgames3-b95m.onrender.com/api/genres/${id}`, {
         withCredentials: true,
       })
       .then(() => {
