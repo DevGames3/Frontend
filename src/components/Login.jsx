@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     axios
       .post(
-        "https://devgames3-b95m.onrender.com/api/user/login",
+        "http://localhost:3001/api/user/login",
         {
           email: email.value,
           password: password.value,
@@ -29,6 +29,7 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
+        console.log(res.data)
         dispatch(setUser(res.data.payload));
         localStorage.setItem("cookie", JSON.stringify(res.data));
         axios
