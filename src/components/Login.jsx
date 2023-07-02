@@ -15,13 +15,12 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
   //Handlers and functions
   const onSubmitHandler = (e) => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:3001/api/user/login",
+        "https://devgames3-b95m.onrender.com/api/user/login",
         {
           email: email.value,
           password: password.value,
@@ -29,7 +28,7 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         dispatch(setUser(res.data.payload));
         localStorage.setItem("cookie", JSON.stringify(res.data));
         axios
