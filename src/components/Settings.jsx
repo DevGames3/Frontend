@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import useInput from "../hooks/useInput";
 import Input from "../commons/Input";
 import cookie from "../hooks/cookie";
@@ -36,7 +36,7 @@ const Settings = () => {
         { withCredentials: true }
       );
       localStorage.setItem("cookie", JSON.stringify(updateInfo.data));
-      console.log(updateInfo)
+      console.log(updateInfo);
 
       dispatch(setUser(updateInfo.data.payload));
       alert("Updated successfuly");
