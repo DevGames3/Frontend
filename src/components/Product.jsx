@@ -11,7 +11,7 @@ import { FaCheck } from "react-icons/fa";
 import ProductData from "../commons/ProductData.jsx";
 import useInput from "../hooks/useInput";
 import { useEffect } from "react";
-import average, { setAverage } from "../state/average";
+import { setAverage } from "../state/average";
 
 const Product = () => {
   //Hooks
@@ -19,7 +19,6 @@ const Product = () => {
   const navigate = useNavigate();
   const content = useInput();
   const ratingValue = useInput();
-  const ratingValueGiven = useInput();
 
   //States
   const product = useSelector((state) => state.product);
@@ -27,7 +26,6 @@ const Product = () => {
   const cart = useSelector((state) => state.cart);
   const average = useSelector((state) => state.average);
   const reviews = useSelector((state) => state.reviews);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [active, setActive] = useState(false);
   const [userReviews, setUserReviews] = useState(true);
 
@@ -46,7 +44,7 @@ const Product = () => {
         console.log("revieewwsss", res.data);
         dispatch(setReviews(res.data));
       });
-  }, []);
+  }, [dispatch, product.id]);
 
   const getAllReviewsOfAUserOrAllReviews = (userName) => {
     userReviews ? setUserReviews(false) : setUserReviews(true);
@@ -78,48 +76,48 @@ const Product = () => {
     navigate(user ? "/cart" : "/login");
   };
 
-  const addToCartHandler = async () => {
-    try {
-      const validate = cart.some((el) => el.id === product.id);
-      if (!validate) {
-        dispatch(setCart(product));
-        if (user.id) {
-          const addToCart = await axios.post(
+  const addToCartHandler = () => {
+    const validate = cart.some((el) => el.id === product.id);
+    if (!validate) {
+      dispatch(setCart(product));
+      if (user.id) {
+        axios
+          .post(
             `https://devgames3-b95m.onrender.com/api/cart/addItem/${user.id}/${product.id}`,
             {},
             { withCredentials: true }
-          );
-        }
+          )
+          .then(() => {
+            "ready";
+          })
+          .catch((error) => {
+            alert("Couldn't add to cart");
+          });
       }
-    } catch (error) {
-      alert("Couldn't add to cart");
     }
   };
 
   const handleAdminNavigate = (item) => {
-    setAnchorEl(null);
     navigate(`/edit/products/${item.id}`);
   };
 
-  const handleAdminDeleteProduct = async (item) => {
-    try {
-      setAnchorEl(null);
-      const deletedGame = await axios.delete(
+  const handleAdminDeleteProduct = (item) => {
+    axios
+      .delete(
         `https://devgames3-b95m.onrender.com/api/games/admin/delete/${item.id}`,
         {
           withCredentials: true,
         }
-      );
-
-      const resetGames = await axios
-        .get("https://devgames3-b95m.onrender.com/api/games")
-        .then((res) => {
-          dispatch(setGames(res.data));
-        });
-      navigate("/");
-    } catch (error) {
-      alert("Couldn't delete game");
-    }
+      )
+      .then(() => {
+        axios
+          .get("https://devgames3-b95m.onrender.com/api/games")
+          .then((res) => dispatch(setGames(res.data)));
+      })
+      .catch(() => {
+        alert("Couldn't delete game");
+      });
+    navigate("/");
   };
 
   const showReviewsHandler = () =>
@@ -159,7 +157,7 @@ const Product = () => {
         console.log("average", average);
         dispatch(setAverage(average));
       });
-  }, []);
+  }, [dispatch, product.id]);
 
   return (
     <div className="mainConteiner">

@@ -31,37 +31,42 @@ const EditUsers = () => {
       .then((res) => {
         dispatch(setUsersDb(res.data));
       });
-  }, []);
+  }, [dispatch]);
 
-  const deleteUserHandler = async (id) => {
-    try {
-      const deletedUser = await axios.post(
+  const deleteUserHandler = (id) => {
+    axios
+      .post(
         `https://devgames3-b95m.onrender.com/api/user/admin/delete/${id}`,
         { token: cookie() },
         {
           withCredentials: true,
         }
-      );
-      dispatch(removeFromUsersDb(id));
-    } catch (error) {
-      alert("Couldn't delete user");
-    }
+      )
+      .then(() => {
+        dispatch(removeFromUsersDb(id));
+      })
+
+      .catch(() => {
+        alert("Couldn't delete user");
+      });
   };
 
-  const editAdminHandler = async (id) => {
-    try {
-      const editedUser = await axios.put(
+  const editAdminHandler = (id) => {
+    axios
+      .put(
         `https://devgames3-b95m.onrender.com/api/user/admin/access/${id}`,
         { token: cookie() },
         {
           withCredentials: true,
         }
-      );
-      dispatch(editAdmin(id));
-      message.success(`Admin permissions successfully modified`);
-    } catch (error) {
-      alert("Couldn't delete user");
-    }
+      )
+      .then(() => {
+        dispatch(editAdmin(id));
+        message.success(`Admin permissions successfully modified`);
+      })
+      .catch((error) => {
+        alert("Couldn't delete user");
+      });
   };
 
   return (

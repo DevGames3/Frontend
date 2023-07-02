@@ -19,66 +19,64 @@ const EditCategories = () => {
   const genres = useSelector((state) => state.genres);
 
   //Handlers
-  const createOnSubmitHandler = async (e) => {
+  const createOnSubmitHandler = (e) => {
     e.preventDefault();
-    try {
-      const createdGenre = await axios.post(
+
+    axios
+      .post(
         "http://localhost:3001/api/genres/create",
         { name: newCategory.value },
         { withCredentials: true }
-      );
-
-      dispatch(addGenres(newCategory.value));
-      newCategory.value = "";
-      navigate("/edit/categories");
-    } catch {
-      alert("Couldn't create category");
-      navigate("/");
-    }
+      )
+      .then(() => {
+        dispatch(addGenres(newCategory.value));
+        newCategory.value = "";
+        navigate("/edit/categories");
+      })
+      .catch(() => {
+        alert("Couldn't create category");
+        navigate("/");
+      });
   };
 
-  const editOnSubmitHandler = async (e) => {
+  const editOnSubmitHandler = (e) => {
     e.preventDefault();
-
-    try {
-      const updatedGenre = await axios.put(
+    axios
+      .put(
         `http://localhost:3001/api/genres/edit/${oldCategory.value}`,
         { name: editedCategory.value },
         { withCredentials: true }
-      );
-
-      const updateGenres = await axios.get(
-        "http://localhost:3001/api/genres/",
-        {
-          withCredentials: true,
-        }
-      );
-
-      dispatch(setGenres(updateGenres.data));
-      editedCategory.value = "";
-      oldCategory.value = "";
-    } catch {
-      alert("Could't update category");
-      navigate("/");
-    }
+      )
+      .then(() => {
+        axios
+          .get("http://localhost:3001/api/genres/", {
+            withCredentials: true,
+          })
+          .then((updateGenres) => {
+            dispatch(setGenres(updateGenres.data));
+            editedCategory.value = "";
+            oldCategory.value = "";
+          })
+          .catch(() => {
+            alert("Could't update category");
+            navigate("/");
+          });
+      });
   };
 
-  const handleAdminDeleteCategory = async (id) => {
-    try {
-      const deletedGenre = axios.delete(
-        `http://localhost:3001/api/genres/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      dispatch(deleteGenres(id));
-      navigate("/edit/categories");
-      
-    } catch {
-      alert("Could't delete category");
-      navigate("/");
-    }
+  const handleAdminDeleteCategory =  (id) => {
+    axios
+      .delete(`http://localhost:3001/api/genres/${id}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        dispatch(deleteGenres(id));
+        navigate("/edit/categories");
+      })
+      .catch(() => {
+        alert("Could't delete category");
+        navigate("/");
+      });
   };
 
   return (

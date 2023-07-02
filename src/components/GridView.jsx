@@ -52,7 +52,7 @@ const GridView = () => {
           dispatch(setGames(result.data));
         });
     }
-  }, [pathname, category, query]);
+  }, [pathname, category, query, dispatch]);
 
   const singleProductHandler = async (item) => {
     try {
@@ -78,11 +78,13 @@ const GridView = () => {
         dispatch(setCart(gameToAdd.data));
 
         if (user.id) {
-          const addedToDb = await axios.post(
-            `http://localhost:3001/api/cart/addItem/${user.id}/${item.id}`,
-            {},
-            { withCredentials: true }
-          );
+          axios
+            .post(
+              `http://localhost:3001/api/cart/addItem/${user.id}/${item.id}`,
+              {},
+              { withCredentials: true }
+            )
+            .then(() => console.log("add to the cart"));
         }
       }
     } catch (error) {
@@ -105,27 +107,22 @@ const GridView = () => {
     navigate(`/edit/products/${id}`);
   };
 
-  const handleAdminDeleteProduct = async (id) => {
-    try {
-      setAnchorEl(null);
+  const handleAdminDeleteProduct = (id) => {
+    setAnchorEl(null);
 
-      const deleteGameAsAdmin = await axios.delete(
-        `http://localhost:3001/api/games/admin/delete/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      const resetGames = await axios
-        .get("http://localhost:3001/api/games")
-        .then((res) => {
-          dispatch(setGames(res.data));
-        });
-
-      navigate("/");
-    } catch (error) {
-      alert("Couldn't delete game");
-    }
+    axios
+      .delete(`http://localhost:3001/api/games/admin/delete/${id}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        axios
+          .get("http://localhost:3001/api/games")
+          .then((res) => dispatch(setGames(res.data)));
+      })
+      .catch(() => {
+        alert("Couldn't delete game");
+      })
+    navigate("/");
   };
 
   return (

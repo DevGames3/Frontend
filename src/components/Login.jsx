@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import useInput from "../hooks/useInput";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { setUser } from "../state/user";
@@ -15,8 +15,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //States
-  const cart = useSelector((state) => state.cart);
 
   //Handlers and functions
   const onSubmitHandler = (e) => {
@@ -31,13 +29,15 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        
         dispatch(setUser(res.data.payload));
         localStorage.setItem("cookie", JSON.stringify(res.data));
         axios
-          .get(`https://devgames3-b95m.onrender.com/api/cart/${res.data.payload.id}`, {
-            withCredentials: true,
-          })
+          .get(
+            `https://devgames3-b95m.onrender.com/api/cart/${res.data.payload.id}`,
+            {
+              withCredentials: true,
+            }
+          )
           .then((res) => {
             if (res.data.length) return dispatch(importCartFromDb(res.data));
             dispatch(

@@ -60,11 +60,11 @@ const EditProducts = () => {
     setGamePlatforms(typeof value === "string" ? value.split(",") : value);
   };
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = (e) => {
     e.preventDefault();
     if (params.id) {
-      try {
-        const editedGame = await axios.put(
+      axios
+        .put(
           `http://localhost:3001/api/games/admin/edit/${params.id}`,
           {
             name: name.value,
@@ -79,15 +79,18 @@ const EditProducts = () => {
             //tags: [tags.value]
           },
           { withCredentials: true }
-        );   
-        alert("Game updated successfully");
-        navigate("/");
-      } catch (error) {
-        alert("Couldn't edit game");
-      }
+        )
+        .then(() => {
+          alert("Game updated successfully");
+          navigate("/");
+        })
+
+        .catch(() => {
+          alert("Couldn't edit game");
+        });
     } else {
-      try {
-        const createdGame = await axios.post(
+      axios
+        .post(
           `http://localhost:3001/api/games/admin/create`,
           {
             name: name.value,
@@ -102,12 +105,14 @@ const EditProducts = () => {
             tags: tags.value,
           },
           { withCredentials: true }
-        );        
-        alert("Game created successfully");
-        navigate("/");
-      } catch (error) {
-        alert("Couldn't edit game");
-      }
+        )
+        .then(() => {
+          alert("Game created successfully");
+          navigate("/");
+        })
+        .catch(() => {
+          alert("Couldn't edit game");
+        });
     }
   };
 
