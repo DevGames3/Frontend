@@ -66,7 +66,9 @@ const GridView = () => {
 
   const singleProductHandler = async (item) => {
     try {
+      console.log(item, "soy el item")
       const singleProduct = await axios.get(`/api/games/${item.id}`);
+      console.log(singleProduct, "soy el single product")
       dispatch(setProduct(singleProduct.data));
       localStorage.setItem("singleProduct", JSON.stringify(singleProduct.data));
       navigate(`/products/${singleProduct.data.id}`);
@@ -149,7 +151,7 @@ const GridView = () => {
                 user={user}
                 open={open}
                 anchorEl={anchorEl}
-                singleProductHandler={()=>singleProductHandler(game)}
+                singleProductHandler={singleProductHandler}
                 addToCartHandler={addToCartHandler}
                 handleClose={handleClose}
                 handleClick={handleClick}
