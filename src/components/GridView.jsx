@@ -149,7 +149,7 @@ const GridView = () => {
                 user={user}
                 open={open}
                 anchorEl={anchorEl}
-                singleProductHandler={singleProductHandler(game)}
+                singleProductHandler={()=>singleProductHandler(game)}
                 addToCartHandler={addToCartHandler}
                 handleClose={handleClose}
                 handleClick={handleClick}

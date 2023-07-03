@@ -34,8 +34,9 @@ function App() {
 
   //Handlers and functions
   useEffect(() => {
-    const product = JSON.parse(localStorage.getItem("singleProduct"));
-    product ? dispatch(setProduct(product)) : null;
+    const product = 
+      JSON.parse(localStorage.getItem("singleProduct"))
+    product ? dispatch(setProduct(product)) : null
     if (!user.id) {
       const cookie = JSON.parse(localStorage.getItem("cookie"));
       if (cookie) dispatch(setUser(cookie.payload));
