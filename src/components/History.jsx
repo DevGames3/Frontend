@@ -20,7 +20,7 @@ const History = () => {
     if (user.id) {
       axios
         .get(`/api/cart/history/${user.id}`)
-        .then((res) => dispatch(setShoppingHistory(res.data)));
+        .then((res) => dispatch(setShoppingHistory(res)));
     }
   }, [dispatch, user.id]);
 

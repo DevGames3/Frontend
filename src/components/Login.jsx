@@ -28,18 +28,18 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res.data);
-        dispatch(setUser(res.data.payload));
-        localStorage.setItem("cookie", JSON.stringify(res.data));
+        console.log(res);
+        dispatch(setUser(res.payload));
+        localStorage.setItem("cookie", JSON.stringify(res));
         axios
           .get(
-            `/api/cart/${res.data.payload.id}`,
+            `/api/cart/${res.payload.id}`,
             {
               withCredentials: true,
             }
           )
           .then((res) => {
-            if (res.data.length) return dispatch(importCartFromDb(res.data));
+            if (res.length) return dispatch(importCartFromDb(res));
             dispatch(
               importCartFromLs(JSON.parse(localStorage.getItem("cart")))
             );

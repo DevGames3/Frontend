@@ -33,7 +33,7 @@ const EditProducts = () => {
   useEffect(() => {
     if (params.id) {
       axios.get(`/api/games/${Number(params.id)}`).then((res) => {
-        setSelectedGame(res.data);
+        setSelectedGame(res);
       });
     }
   }, [params]);

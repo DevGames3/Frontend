@@ -29,7 +29,7 @@ const EditUsers = () => {
         }
       )
       .then((res) => {
-        dispatch(setUsersDb(res.data));
+        dispatch(setUsersDb(res));
       });
   }, [dispatch]);
 

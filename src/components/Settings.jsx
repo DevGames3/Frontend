@@ -35,10 +35,10 @@ const Settings = () => {
         }),
         { withCredentials: true }
       );
-      localStorage.setItem("cookie", JSON.stringify(updateInfo.data));
+      localStorage.setItem("cookie", JSON.stringify(updateInfo));
       console.log(updateInfo);
 
-      dispatch(setUser(updateInfo.data.payload));
+      dispatch(setUser(updateInfo.payload));
       alert("Updated successfuly");
       navigate("/");
     } catch (error) {

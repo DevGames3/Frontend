@@ -40,13 +40,13 @@ function App() {
       if (cookie) dispatch(setUser(cookie.payload));
     }
     axios.get("/api/genres/", { withCredentials: true }).then((res) => {
-      dispatch(setGenres(res.data));
+      dispatch(setGenres(res));
     });
     axios.get("/api/developers/", { withCredentials: true }).then((res) => {
-      dispatch(setDevelopers(res.data));
+      dispatch(setDevelopers(res));
     });
     axios.get("/api/platforms/", { withCredentials: true }).then((res) => {
-      dispatch(setPlatforms(res.data));
+      dispatch(setPlatforms(res));
     });
 
     if (user.id) {
@@ -54,7 +54,7 @@ function App() {
         .get(`/api/cart/${user.id}`, {
           withCredentials: true,
         })
-        .then((res) => dispatch(importCartFromDb(res.data)));
+        .then((res) => dispatch(importCartFromDb(res)));
     } else {
       dispatch(importCartFromLs(JSON.parse(localStorage.getItem("cart"))));
     }

@@ -46,7 +46,7 @@ const GridView = () => {
           }
         )
         .then((result) => {
-          dispatch(setGames(result.data));
+          dispatch(setGames(result));
         });
     }
     if (pathname === "category") {
@@ -59,7 +59,7 @@ const GridView = () => {
           }
         )
         .then((result) => {
-          dispatch(setGames(result.data));
+          dispatch(setGames(result));
         });
     }
   }, [pathname, category, query, dispatch]);
@@ -83,7 +83,7 @@ const GridView = () => {
       if (!validate) {
         const gameToAdd = await axios.get(`/api/games/${item.id}`);
 
-        dispatch(setCart(gameToAdd.data));
+        dispatch(setCart(gameToAdd));
 
         if (user.id) {
           axios
@@ -127,7 +127,7 @@ const GridView = () => {
         }
       )
       .then(() => {
-        axios.get("/api/games").then((res) => dispatch(setGames(res.data)));
+        axios.get("/api/games").then((res) => dispatch(setGames(res)));
       })
       .catch(() => {
         alert("Couldn't delete game");

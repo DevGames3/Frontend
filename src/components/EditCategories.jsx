@@ -60,7 +60,7 @@ const EditCategories = () => {
             withCredentials: true,
           })
           .then((updateGenres) => {
-            dispatch(setGenres(updateGenres.data));
+            dispatch(setGenres(updateGenres));
             editedCategory.value = "";
             oldCategory.value = "";
           })

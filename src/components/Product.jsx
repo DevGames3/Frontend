@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "../api/instance"
+import axios from "../api/instance";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import stringGenerator from "../utils/stringGenerator";
@@ -38,33 +38,28 @@ const Product = () => {
   //Handlers and functions
 
   useEffect(() => {
-    axios
-      .get(`/api/review/${product.id}`)
-      .then((res) => {
-        console.log("revieewwsss", res.data);
-        dispatch(setReviews(res.data));
-      });
+    axios.get(`/api/review/${product.id}`).then((res) => {
+      console.log("revieewwsss", res);
+      dispatch(setReviews(res));
+    });
   }, [dispatch, product.id]);
 
   const getAllReviewsOfAUserOrAllReviews = (userName) => {
     userReviews ? setUserReviews(false) : setUserReviews(true);
     if (userReviews)
       axios
-        .get(
-          `/api/review/${product.id}/${userName}`,
-          {
-            withCredentials: true,
-          }
-        )
-        .then((res) => dispatch(setReviews(res.data)));
+        .get(`/api/review/${product.id}/${userName}`, {
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setReviews(res)));
     else {
       axios
         .get(`/api/review/${product.id}`, {
           withCredentials: true,
         })
         .then((res) => {
-          console.log("revieewwsss", res.data);
-          dispatch(setReviews(res.data));
+          console.log("revieewwsss", res);
+          dispatch(setReviews(res));
         });
     }
   };
@@ -103,16 +98,11 @@ const Product = () => {
 
   const handleAdminDeleteProduct = (item) => {
     axios
-      .delete(
-        `/api/games/admin/delete/${item.id}`,
-        {
-          withCredentials: true,
-        }
-      )
+      .delete(`/api/games/admin/delete/${item.id}`, {
+        withCredentials: true,
+      })
       .then(() => {
-        axios
-          .get("/api/games")
-          .then((res) => dispatch(setGames(res.data)));
+        axios.get("/api/games").then((res) => dispatch(setGames(res)));
       })
       .catch(() => {
         alert("Couldn't delete game");
@@ -126,20 +116,17 @@ const Product = () => {
   const reviewSubmitHandler = (e) => {
     e.preventDefault();
     axios
-      .post(
-        `/api/review/${product.id}/${user.id}`,
-        {
-          content: content.value,
-          rating: Number(ratingValue.value),
-        }
-      )
+      .post(`/api/review/${product.id}/${user.id}`, {
+        content: content.value,
+        rating: Number(ratingValue.value),
+      })
       .then((res) => {
         dispatch(
           addReview({
-            id: res.data.review.id,
-            content: res.data.review.content,
-            rating: res.data.review.rating,
-            user: res.data.user,
+            id: res.review.id,
+            content: res.review.content,
+            rating: res.review.rating,
+            user: res.user,
           })
         );
         content.value = "";
@@ -147,16 +134,14 @@ const Product = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`/api/review/${product.id}`)
-      .then((res) => {
-        const averageArray = res.data.map((review) => review.rating);
-        const average =
-          averageArray.reduce((acc, num) => (acc += num)) / averageArray.length;
-        console.log("averageArray", averageArray);
-        console.log("average", average);
-        dispatch(setAverage(average));
-      });
+    axios.get(`/api/review/${product.id}`).then((res) => {
+      const averageArray = res.map((review) => review.rating);
+      const average =
+        averageArray.reduce((acc, num) => (acc += num)) / averageArray.length;
+      console.log("averageArray", averageArray);
+      console.log("average", average);
+      dispatch(setAverage(average));
+    });
   }, [dispatch, product.id]);
 
   return (
