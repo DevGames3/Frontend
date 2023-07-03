@@ -32,7 +32,7 @@ const GridView = () => {
   useEffect(() => {
     if (pathname === "") {
       axios.get("/api/games").then((res) => {
-        console.log(res.data);
+        console.log(res);
         dispatch(setGames(res.data));
       });
     }
