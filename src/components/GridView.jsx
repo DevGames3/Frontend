@@ -69,9 +69,9 @@ const GridView = () => {
       console.log(item, "soy el item")
       const singleProduct = await axios.get(`/api/games/${item.id}`);
       console.log(singleProduct, "soy el single product")
-      dispatch(setProduct(singleProduct.data));
-      localStorage.setItem("singleProduct", JSON.stringify(singleProduct.data));
-      navigate(`/products/${singleProduct.data.id}`);
+      dispatch(setProduct(singleProduct));
+      localStorage.setItem("singleProduct", JSON.stringify(singleProduct));
+      navigate(`/products/${singleProduct.id}`);
     } catch (error) {
       console.log(error);
     }
