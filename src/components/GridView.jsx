@@ -33,7 +33,7 @@ const GridView = () => {
     if (pathname === "") {
       axios.get("/api/games").then((res) => {
         console.log(res);
-        dispatch(setGames(res.data));
+        dispatch(setGames(res));
       });
     }
     if (pathname === "search") {
