@@ -1,11 +1,12 @@
 import React from "react";
-import axios from "axios";
+import axios from "../api/instance";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import useInput from "../hooks/useInput";
 import { setGenres, addGenres, deleteGenres } from "../state/genres";
 import ProductData from "../commons/ProductData.jsx";
 import { FaTrash } from "react-icons/fa";
+import cookie from "../hooks/cookie";
 
 const EditCategories = () => {
   //Hooks
@@ -24,8 +25,11 @@ const EditCategories = () => {
 
     axios
       .post(
-        "https://devgames3-b95m.onrender.com/api/genres/create",
-        { name: newCategory.value },
+        "/api/genres/create",
+        {
+          token: cookie(),
+          name: newCategory.value,
+        },
         { withCredentials: true }
       )
       .then(() => {
@@ -43,13 +47,16 @@ const EditCategories = () => {
     e.preventDefault();
     axios
       .put(
-        `https://devgames3-b95m.onrender.com/api/genres/edit/${oldCategory.value}`,
-        { name: editedCategory.value },
+        `/api/genres/edit/${oldCategory.value}`,
+        {
+          token: cookie(),
+          name: editedCategory.value,
+        },
         { withCredentials: true }
       )
       .then(() => {
         axios
-          .get("https://devgames3-b95m.onrender.com/api/genres/", {
+          .get("/api/genres/", {
             withCredentials: true,
           })
           .then((updateGenres) => {
@@ -64,11 +71,15 @@ const EditCategories = () => {
       });
   };
 
-  const handleAdminDeleteCategory =  (id) => {
+  const handleAdminDeleteCategory = (id) => {
     axios
-      .delete(`https://devgames3-b95m.onrender.com/api/genres/${id}`, {
-        withCredentials: true,
-      })
+      .post(
+        `/api/genres/${id}`,
+        { token: cookie() },
+        {
+          withCredentials: true,
+        }
+      )
       .then(() => {
         dispatch(deleteGenres(id));
         navigate("/edit/categories");

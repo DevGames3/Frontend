@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../api/instance";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import useInput from "../hooks/useInput";
@@ -17,7 +17,7 @@ const Register = () => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     axios
-      .post("https://devgames3-b95m.onrender.com/api/user/register", {
+      .post("/api/user/register", {
         name: name.value,
         lastName: lastname.value,
         email: email.value,

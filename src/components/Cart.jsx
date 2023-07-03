@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../api/instance";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { removeFromCart, removeAllItems } from "../state/cart";
@@ -14,7 +14,6 @@ const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user);
 
-
   //Variables
   const total = cart.reduce((acc, el) => acc + el.price, 0);
 
@@ -24,7 +23,7 @@ const Cart = () => {
     if (user.id) {
       axios
         .post(
-          `https://devgames3-b95m.onrender.com/api/cart/removeItem/${user.id}/${item.id}`,
+          `/api/cart/removeItem/${user.id}/${item.id}`,
           {},
           { withCredentials: true }
         )
@@ -36,11 +35,7 @@ const Cart = () => {
     if (!user.name) return navigate("/login");
     if (user.id) {
       axios
-        .post(
-          `https://devgames3-b95m.onrender.com/api/cart/purchase/${user.id}`,
-          {},
-          { withCredentials: true }
-        )
+        .post(`/api/cart/purchase/${user.id}`, {}, { withCredentials: true })
         .then((res) => {
           dispatch(removeAllItems([]));
         });

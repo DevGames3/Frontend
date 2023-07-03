@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import axios from "axios";
+import axios from "../api/instance";
 import { useSelector, useDispatch } from "react-redux";
 import { setUsersDb, removeFromUsersDb, editAdmin } from "../state/usersDb";
 import { message } from "antd";
@@ -22,7 +22,7 @@ const EditUsers = () => {
   useEffect(() => {
     axios
       .post(
-        "https://devgames3-b95m.onrender.com/api/user/admin",
+        "/api/user/admin",
         { token: cookie() },
         {
           withCredentials: true,
@@ -36,7 +36,7 @@ const EditUsers = () => {
   const deleteUserHandler = (id) => {
     axios
       .post(
-        `https://devgames3-b95m.onrender.com/api/user/admin/delete/${id}`,
+        `/api/user/admin/delete/${id}`,
         { token: cookie() },
         {
           withCredentials: true,
@@ -54,7 +54,7 @@ const EditUsers = () => {
   const editAdminHandler = (id) => {
     axios
       .put(
-        `https://devgames3-b95m.onrender.com/api/user/admin/access/${id}`,
+        `/api/user/admin/access/${id}`,
         { token: cookie() },
         {
           withCredentials: true,

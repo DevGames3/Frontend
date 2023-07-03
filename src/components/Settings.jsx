@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../api/instance"
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import useInput from "../hooks/useInput";
@@ -25,7 +25,7 @@ const Settings = () => {
       e.preventDefault();
 
       const updateInfo = await axios.put(
-        "https://devgames3-b95m.onrender.com/api/user/me/edit",
+        "/api/user/me/edit",
         verifyData({
           token: cookie(),
           name: name.value,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../api/instance"
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import stringGenerator from "../utils/stringGenerator";
@@ -39,7 +39,7 @@ const Product = () => {
 
   useEffect(() => {
     axios
-      .get(`https://devgames3-b95m.onrender.com/api/review/${product.id}`)
+      .get(`/api/review/${product.id}`)
       .then((res) => {
         console.log("revieewwsss", res.data);
         dispatch(setReviews(res.data));
@@ -51,7 +51,7 @@ const Product = () => {
     if (userReviews)
       axios
         .get(
-          `https://devgames3-b95m.onrender.com/api/review/${product.id}/${userName}`,
+          `/api/review/${product.id}/${userName}`,
           {
             withCredentials: true,
           }
@@ -59,7 +59,7 @@ const Product = () => {
         .then((res) => dispatch(setReviews(res.data)));
     else {
       axios
-        .get(`https://devgames3-b95m.onrender.com/api/review/${product.id}`, {
+        .get(`/api/review/${product.id}`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -83,7 +83,7 @@ const Product = () => {
       if (user.id) {
         axios
           .post(
-            `https://devgames3-b95m.onrender.com/api/cart/addItem/${user.id}/${product.id}`,
+            `/api/cart/addItem/${user.id}/${product.id}`,
             {},
             { withCredentials: true }
           )
@@ -104,14 +104,14 @@ const Product = () => {
   const handleAdminDeleteProduct = (item) => {
     axios
       .delete(
-        `https://devgames3-b95m.onrender.com/api/games/admin/delete/${item.id}`,
+        `/api/games/admin/delete/${item.id}`,
         {
           withCredentials: true,
         }
       )
       .then(() => {
         axios
-          .get("https://devgames3-b95m.onrender.com/api/games")
+          .get("/api/games")
           .then((res) => dispatch(setGames(res.data)));
       })
       .catch(() => {
@@ -127,7 +127,7 @@ const Product = () => {
     e.preventDefault();
     axios
       .post(
-        `https://devgames3-b95m.onrender.com/api/review/${product.id}/${user.id}`,
+        `/api/review/${product.id}/${user.id}`,
         {
           content: content.value,
           rating: Number(ratingValue.value),
@@ -148,7 +148,7 @@ const Product = () => {
 
   useEffect(() => {
     axios
-      .get(`https://devgames3-b95m.onrender.com/api/review/${product.id}`)
+      .get(`/api/review/${product.id}`)
       .then((res) => {
         const averageArray = res.data.map((review) => review.rating);
         const average =

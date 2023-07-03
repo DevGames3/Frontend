@@ -1,5 +1,5 @@
 import "./App.css";
-import axios from "axios";
+import axios from "./api/instance";
 import { useEffect } from "react";
 import { Routes, Route } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,25 +39,19 @@ function App() {
       const cookie = JSON.parse(localStorage.getItem("cookie"));
       if (cookie) dispatch(setUser(cookie.payload));
     }
-    axios
-      .get("http://localhost:3001/api/genres/", { withCredentials: true })
-      .then((res) => {
-        dispatch(setGenres(res.data));
-      });
-    axios
-      .get("http://localhost:3001/api/developers/", { withCredentials: true })
-      .then((res) => {
-        dispatch(setDevelopers(res.data));
-      });
-    axios
-      .get("http://localhost:3001/api/platforms/", { withCredentials: true })
-      .then((res) => {
-        dispatch(setPlatforms(res.data));
-      });
+    axios.get("/api/genres/", { withCredentials: true }).then((res) => {
+      dispatch(setGenres(res.data));
+    });
+    axios.get("/api/developers/", { withCredentials: true }).then((res) => {
+      dispatch(setDevelopers(res.data));
+    });
+    axios.get("/api/platforms/", { withCredentials: true }).then((res) => {
+      dispatch(setPlatforms(res.data));
+    });
 
     if (user.id) {
       axios
-        .get(`http://localhost:3001/api/cart/${user.id}`, {
+        .get(`/api/cart/${user.id}`, {
           withCredentials: true,
         })
         .then((res) => dispatch(importCartFromDb(res.data)));

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../api/instance";
 import { useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -8,6 +8,7 @@ import { setCart } from "../state/cart";
 import { setGames } from "../state/games";
 import Card from "../commons/Card";
 import Grid from "@mui/material/Grid";
+import cookie from "../hooks/cookie";
 
 const GridView = () => {
   //Hooks
@@ -30,24 +31,32 @@ const GridView = () => {
   //Handlers and functions
   useEffect(() => {
     if (pathname === "") {
-      axios.get("https://devgames3-b95m.onrender.com/api/games").then((res) => {
+      axios.get("/api/games").then((res) => {
         dispatch(setGames(res.data));
       });
     }
     if (pathname === "search") {
       axios
-        .get(`https://devgames3-b95m.onrender.com/api/games/search?name=${query}`, {
-          withCredentials: true,
-        })
+        .post(
+          `/api/games/search?name=${query}`,
+          { token: cookie() },
+          {
+            withCredentials: true,
+          }
+        )
         .then((result) => {
           dispatch(setGames(result.data));
         });
     }
     if (pathname === "category") {
       axios
-        .get(`https://devgames3-b95m.onrender.com/api/games/category/${category}`, {
-          withCredentials: true,
-        })
+        .post(
+          `/api/games/category/${category}`,
+          { token: cookie() },
+          {
+            withCredentials: true,
+          }
+        )
         .then((result) => {
           dispatch(setGames(result.data));
         });
@@ -56,9 +65,7 @@ const GridView = () => {
 
   const singleProductHandler = async (item) => {
     try {
-      const singleProduct = await axios.get(
-        `https://devgames3-b95m.onrender.com/api/games/${item.id}`
-      );
+      const singleProduct = await axios.get(`/api/games/${item.id}`);
       dispatch(setProduct(singleProduct.data));
       localStorage.setItem("singleProduct", JSON.stringify(singleProduct.data));
       navigate(`/products/${singleProduct.data.id}`);
@@ -71,16 +78,14 @@ const GridView = () => {
     try {
       const validate = cart.some((el) => el.id === item.id);
       if (!validate) {
-        const gameToAdd = await axios.get(
-          `https://devgames3-b95m.onrender.com/api/games/${item.id}`
-        );
+        const gameToAdd = await axios.get(`/api/games/${item.id}`);
 
         dispatch(setCart(gameToAdd.data));
 
         if (user.id) {
           axios
             .post(
-              `https://devgames3-b95m.onrender.com/api/cart/addItem/${user.id}/${item.id}`,
+              `/api/cart/addItem/${user.id}/${item.id}`,
               {},
               { withCredentials: true }
             )
@@ -111,17 +116,19 @@ const GridView = () => {
     setAnchorEl(null);
 
     axios
-      .delete(`https://devgames3-b95m.onrender.com/api/games/admin/delete/${id}`, {
-        withCredentials: true,
-      })
+      .post(
+        `/api/games/admin/delete/${id}`,
+        { token: cookie() },
+        {
+          withCredentials: true,
+        }
+      )
       .then(() => {
-        axios
-          .get("https://devgames3-b95m.onrender.com/api/games")
-          .then((res) => dispatch(setGames(res.data)));
+        axios.get("/api/games").then((res) => dispatch(setGames(res.data)));
       })
       .catch(() => {
         alert("Couldn't delete game");
-      })
+      });
     navigate("/");
   };
 

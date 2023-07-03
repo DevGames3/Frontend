@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../api/instance"
 import useInput from "../hooks/useInput";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     axios
       .post(
-        "https://devgames3-b95m.onrender.com/api/user/login",
+        "/api/user/login",
         {
           email: email.value,
           password: password.value,
@@ -33,7 +33,7 @@ const Login = () => {
         localStorage.setItem("cookie", JSON.stringify(res.data));
         axios
           .get(
-            `https://devgames3-b95m.onrender.com/api/cart/${res.data.payload.id}`,
+            `/api/cart/${res.data.payload.id}`,
             {
               withCredentials: true,
             }

@@ -1,10 +1,10 @@
-import axios from "axios"
+import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3001',  
+  baseURL: "https://devgames3-b95m.onrender.com",
 });
 
-instance.interceptors.response.use (response => response.data);
+instance.interceptors.response.use((response) => response.data);
 
 export default instance;
 

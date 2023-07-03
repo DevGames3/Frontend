@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../api/instance";
 import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import Input from "../commons/Input";
 import ProductData from "../commons/ProductData.jsx";
 import FormSelectBtn from "../commons/FormSelectBtn";
+import cookie from "../hooks/cookie";
 
 const EditProducts = () => {
   //States
@@ -31,11 +32,9 @@ const EditProducts = () => {
   //Handlers
   useEffect(() => {
     if (params.id) {
-      axios
-        .get(`https://devgames3-b95m.onrender.com/api/games/${Number(params.id)}`)
-        .then((res) => {
-          setSelectedGame(res.data);
-        });
+      axios.get(`/api/games/${Number(params.id)}`).then((res) => {
+        setSelectedGame(res.data);
+      });
     }
   }, [params]);
 
@@ -65,8 +64,9 @@ const EditProducts = () => {
     if (params.id) {
       axios
         .put(
-          `https://devgames3-b95m.onrender.com/api/games/admin/edit/${params.id}`,
+          `/api/games/admin/edit/${params.id}`,
           {
+            token: cookie(),
             name: name.value,
             description: description.value,
             playtime: Number(playtime.value),
@@ -91,8 +91,9 @@ const EditProducts = () => {
     } else {
       axios
         .post(
-          `https://devgames3-b95m.onrender.com/api/games/admin/create`,
+          `/api/games/admin/create`,
           {
+            token: cookie(),
             name: name.value,
             description: description.value,
             playtime: playtime.value,
