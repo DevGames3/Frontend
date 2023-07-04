@@ -40,7 +40,6 @@ const GridView = () => {
       axios
         .post(
           `/api/games/search?name=${query}`,
-          { token: cookie() },
           {
             withCredentials: true,
           }
@@ -53,7 +52,6 @@ const GridView = () => {
       axios
         .post(
           `/api/games/category/${category}`,
-          { token: cookie() },
           {
             withCredentials: true,
           }
@@ -66,9 +64,9 @@ const GridView = () => {
 
   const singleProductHandler = async (item) => {
     try {
-      console.log(item, "soy el item")
+      console.log(item, "soy el item");
       const singleProduct = await axios.get(`/api/games/${item.id}`);
-      console.log(singleProduct, "soy el single product")
+      console.log(singleProduct, "soy el single product");
       dispatch(setProduct(singleProduct));
       localStorage.setItem("singleProduct", JSON.stringify(singleProduct));
       navigate(`/products/${singleProduct.id}`);
